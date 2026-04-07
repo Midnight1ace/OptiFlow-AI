@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: optiflow-backend
+    env_file:
+      - ./.env
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: optiflow-frontend
+    env_file:
+      - ./.env
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://backend:8000/api/v1
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
