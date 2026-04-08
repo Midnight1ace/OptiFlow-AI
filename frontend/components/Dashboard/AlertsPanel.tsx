@@ -1,23 +1,41 @@
-import { Card } from "@/components/UI/Card";
+type ActionItem = {
+  label: string;
+  tag: string;
+  tone: "urgent" | "info" | "success";
+};
 
 type AlertsPanelProps = {
-  actions: string[];
+  actions: ActionItem[];
+};
+
+const actionIcons: Record<ActionItem["tone"], string> = {
+  urgent: "■",
+  info: "◔",
+  success: "▣"
 };
 
 export function AlertsPanel({ actions }: AlertsPanelProps) {
   return (
-    <Card
-      title="AI Decisions"
-      subtitle="Recommended actions from the current rules engine"
-      accent="gold"
-    >
-      <div className="alert-list">
+    <section className="panel-section">
+      <header className="section-head">
+        <div>
+          <h2>Recommended Actions</h2>
+        </div>
+      </header>
+
+      <div className="action-list">
         {actions.map((action) => (
-          <div className="alert-pill" key={action}>
-            {action}
-          </div>
+          <article className="action-row" key={`${action.label}-${action.tag}`}>
+            <div className="action-main">
+              <span className={`action-icon action-icon-${action.tone}`}>
+                {actionIcons[action.tone]}
+              </span>
+              <span>{action.label}</span>
+            </div>
+            <span className={`action-tag action-tag-${action.tone}`}>{action.tag}</span>
+          </article>
         ))}
       </div>
-    </Card>
+    </section>
   );
 }

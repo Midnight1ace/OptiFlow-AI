@@ -2,6 +2,8 @@
 
 OptiFlow AI is a starter platform for queue-aware operational decisions in healthcare settings. The current scaffold gives you a FastAPI backend with a rules-based decision engine and a Next.js dashboard that visualizes queues, staffing, and recommended actions.
 
+The frontend now includes an admin login flow and a dashboard layout modeled after a classic hospital operations console.
+
 ## Stack
 
 - Frontend: Next.js App Router with TypeScript
@@ -33,6 +35,9 @@ docker compose up --build
 Frontend:
 `http://localhost:3000`
 
+Login:
+`http://localhost:3000/login`
+
 Backend:
 `http://localhost:8000`
 
@@ -59,6 +64,21 @@ npm install
 npm run dev
 ```
 
+## Admin Login
+
+The root route now redirects to the admin login page. Dashboard routes are protected by a simple server-side cookie check.
+
+Starter credentials come from `.env`:
+
+```env
+ADMIN_EMAIL=admin@optiflow.local
+ADMIN_PASSWORD=ChangeMe123!
+```
+
+Change those values before sharing or deploying the app.
+
+The Next.js frontend is configured to read the repository-root `.env`, so you only need to update credentials in one place.
+
 ## Current MVP Features
 
 - Queue snapshot endpoint at `/api/v1/queue`
@@ -66,6 +86,8 @@ npm run dev
 - Decision endpoint at `/api/v1/decisions`
 - Rules engine in `backend/app/ai/rules.py`
 - Dashboard page at `/dashboard`
+- Admin login page at `/login`
+- Protected frontend routes for dashboard, reports, and settings
 
 ## Key Files
 

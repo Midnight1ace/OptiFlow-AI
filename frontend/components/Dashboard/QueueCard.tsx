@@ -1,25 +1,43 @@
-import { QueueAreas } from "@/types/queue";
-import { Card } from "@/components/UI/Card";
-
-type QueueCardProps = {
-  areas: QueueAreas;
+type QueueItem = {
+  label: string;
+  waiting: number;
+  load: string;
+  tone: "critical" | "moderate" | "stable";
 };
 
-export function QueueCard({ areas }: QueueCardProps) {
+type QueueCardProps = {
+  items: QueueItem[];
+};
+
+const toneIcons: Record<QueueItem["tone"], string> = {
+  critical: "▶",
+  moderate: "▦",
+  stable: "▤"
+};
+
+export function QueueCard({ items }: QueueCardProps) {
   return (
-    <Card
-      title="Queue Load"
-      subtitle="Current waiting patients by department"
-      accent="coral"
-    >
-      <div className="metric-list">
-        {Object.entries(areas).map(([area, count]) => (
-          <div className="metric-row" key={area}>
-            <span>{area}</span>
-            <strong>{count}</strong>
-          </div>
+    <section className="panel-section panel-section-wide">
+      <header className="section-head">
+        <div>
+          <h2>Current Queues</h2>
+        </div>
+      </header>
+
+      <div className="queue-stack">
+        {items.map((item) => (
+          <article className={`queue-card queue-${item.tone}`} key={item.label}>
+            <div className="queue-icon">{toneIcons[item.tone]}</div>
+            <div className="queue-copy">
+              <span className="queue-label">{item.label}</span>
+              <div className="queue-topline">
+                <strong>{item.waiting} Waiting</strong>
+              </div>
+              <span>{item.load}</span>
+            </div>
+          </article>
         ))}
       </div>
-    </Card>
+    </section>
   );
 }

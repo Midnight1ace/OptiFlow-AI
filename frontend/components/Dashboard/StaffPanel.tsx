@@ -1,40 +1,57 @@
-import { Card } from "@/components/UI/Card";
-import { StaffSnapshot } from "@/types/staff";
-
 type StaffPanelProps = {
-  staff: StaffSnapshot;
+  totalOnDuty: number;
+  available: number;
+  openRooms: number;
+  chartValues: number[];
 };
 
-export function StaffPanel({ staff }: StaffPanelProps) {
+export function StaffPanel({
+  totalOnDuty,
+  available,
+  openRooms,
+  chartValues
+}: StaffPanelProps) {
+  const columns = ["Active", "Idle Shift", "Free", "Monitors"];
+
   return (
-    <Card
-      title="Staff Status"
-      subtitle="Available capacity and role mix"
-      accent="teal"
-    >
-      <div className="staff-summary">
+    <section className="panel-section">
+      <header className="section-head">
         <div>
-          <span>Total</span>
-          <strong>{staff.total}</strong>
+          <h2>Staff Overview</h2>
         </div>
-        <div>
-          <span>Idle</span>
-          <strong>{staff.idle}</strong>
-        </div>
-        <div>
-          <span>Busy</span>
-          <strong>{staff.busy}</strong>
-        </div>
+      </header>
+
+      <div className="staff-stat-grid">
+        <article className="staff-stat-card">
+          <strong>{totalOnDuty}</strong>
+          <span>On Duty</span>
+        </article>
+        <article className="staff-stat-card">
+          <strong>{available}</strong>
+          <span>Available</span>
+        </article>
+        <article className="staff-stat-card staff-stat-card-accent">
+          <strong>{openRooms}</strong>
+          <span>Open Rooms</span>
+        </article>
       </div>
 
-      <div className="metric-list compact">
-        {Object.entries(staff.byRole).map(([role, count]) => (
-          <div className="metric-row" key={role}>
-            <span>{role}</span>
-            <strong>{count}</strong>
-          </div>
-        ))}
+      <div className="mini-chart-card">
+        <div className="bar-chart" aria-label="Staff activity chart">
+          {chartValues.map((value, index) => (
+            <span
+              className="bar-chart-column"
+              key={`${value}-${index}`}
+              style={{ height: `${Math.max(20, Math.round(value / 5))}px` }}
+            />
+          ))}
+        </div>
+        <div className="chart-labels">
+          {columns.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
       </div>
-    </Card>
+    </section>
   );
 }

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "../styles/globals.css";
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans"
+});
 
 export const metadata: Metadata = {
   title: "OptiFlow AI",
@@ -14,7 +20,7 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={plusJakartaSans.variable}>{children}</body>
     </html>
   );
 }
