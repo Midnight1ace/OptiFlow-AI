@@ -4,6 +4,27 @@
 
 This guide covers deploying OptiFlow AI to various environments including development, staging, and production.
 
+## Vercel Services Deployment
+
+For this repository, Vercel should be configured as a multi-service project with the **Services** framework preset and the root [`vercel.json`](/c:/Users/zamee/OneDrive/Desktop/github/OptiFlow%20AI/vercel.json:1) file committed.
+
+This project uses:
+
+- `frontend` at `/`
+- `backend` at `/_backend`
+
+### Required Vercel settings
+
+1. Import the repository as a new project.
+2. Keep the **Framework Preset** set to `Services`.
+3. Make sure the following environment variables are set in Vercel:
+
+```env
+FRONTEND_ORIGIN=https://your-project-domain.vercel.app
+```
+
+`NEXT_PUBLIC_API_BASE_URL` is optional on Vercel. If you leave it unset, the frontend now automatically talks to the backend service at `/_backend/api/v1`.
+
 ## Environment Configuration
 
 ### Environment Variables
