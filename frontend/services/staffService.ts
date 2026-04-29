@@ -1,4 +1,4 @@
-import { fetchJson } from "@/services/api";
+import { ApiResult, fetchJson } from "@/services/api";
 import { StaffSnapshot } from "@/types/staff";
 
 type StaffApiResponse = {
@@ -6,6 +6,7 @@ type StaffApiResponse = {
   idle: number;
   busy: number;
   by_role: Record<string, number>;
+  captured_at?: string;
 };
 
 const fallbackStaffResponse: StaffApiResponse = {
@@ -19,13 +20,18 @@ const fallbackStaffResponse: StaffApiResponse = {
   }
 };
 
-export async function getStaffSnapshot(): Promise<StaffSnapshot> {
-  const payload = await fetchJson<StaffApiResponse>("/staff", fallbackStaffResponse);
+export async function getStaffSnapshot(): Promise<ApiResult<StaffSnapshot>> {
+  const result = await fetchJson<StaffApiResponse>("/staff", fallbackStaffResponse);
+  const payload = result.data;
 
   return {
-    total: payload.total,
-    idle: payload.idle,
-    busy: payload.busy,
-    byRole: payload.by_role
+    ...result,
+    data: {
+      total: payload.total,
+      idle: payload.idle,
+      busy: payload.busy,
+      byRole: payload.by_role,
+      capturedAt: payload.captured_at
+    }
   };
 }

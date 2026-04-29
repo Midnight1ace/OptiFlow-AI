@@ -1,6 +1,9 @@
 import { AppHeader } from "@/components/Shell/AppHeader";
+import { requireAdminSession } from "@/lib/adminSession";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  await requireAdminSession("/settings");
+
   return (
     <div className="app-screen">
       <AppHeader activeItem="Settings" />
@@ -9,22 +12,27 @@ export default function SettingsPage() {
           <div className="section-head">
             <div>
               <h1>Settings</h1>
-              <p className="subtitle">Configure alert rules, thresholds, and admin access.</p>
+              <p className="subtitle">Roadmap preview for configurable thresholds and admin controls.</p>
             </div>
+          </div>
+
+          <div className="roadmap-note">
+            Threshold editing and admin policy management are planned features. The live app still
+            uses fixed backend rules and environment-based admin credentials.
           </div>
 
           <div className="placeholder-grid">
             <article className="placeholder-card">
               <h3>ER threshold</h3>
-              <p>Adjust the queue level that triggers a congestion alert or staffing suggestion.</p>
+              <p>Planned: adjust the queue level that triggers a congestion alert or staffing suggestion.</p>
             </article>
             <article className="placeholder-card">
               <h3>Notification policy</h3>
-              <p>Define which actions are marked urgent, postponed, or capacity related.</p>
+              <p>Planned: define which actions are marked urgent, staffing-related, or capacity-related.</p>
             </article>
             <article className="placeholder-card">
               <h3>Admin controls</h3>
-              <p>Rotate credentials and review access decisions for your operations team.</p>
+              <p>Planned: rotate credentials and review access decisions for the operations team.</p>
             </article>
           </div>
         </section>

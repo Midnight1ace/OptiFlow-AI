@@ -4,6 +4,14 @@
 
 This guide covers deploying OptiFlow AI to various environments including development, staging, and production.
 
+## Summary Name
+
+`OptiFlow AI Vercel Multi-Service Deployment`
+
+## Summary
+
+OptiFlow AI is deployed on Vercel as a multi-service project with a Next.js frontend served at `/` and a FastAPI backend served at `/_backend`. The frontend can automatically call the backend through the internal Vercel service route, so `NEXT_PUBLIC_API_BASE_URL` is optional when deploying on Vercel. The main required production setting is `FRONTEND_ORIGIN`, which should match the public project domain.
+
 ## Vercel Services Deployment
 
 For this repository, Vercel should be configured as a multi-service project with the **Services** framework preset and the root [`vercel.json`](/c:/Users/zamee/OneDrive/Desktop/github/OptiFlow%20AI/vercel.json:1) file committed.

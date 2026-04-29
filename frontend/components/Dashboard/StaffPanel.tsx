@@ -1,54 +1,64 @@
-type StaffPanelProps = {
-  totalOnDuty: number;
-  available: number;
-  openRooms: number;
-  chartValues: number[];
+type StaffStat = {
+  label: string;
+  value: number;
+  accent?: boolean;
 };
 
-export function StaffPanel({
-  totalOnDuty,
-  available,
-  openRooms,
-  chartValues
-}: StaffPanelProps) {
-  const columns = ["Active", "Idle Shift", "Free", "Monitors"];
+type RoleDistribution = {
+  label: string;
+  value: number;
+};
+
+type StaffPanelProps = {
+  stats: StaffStat[];
+  roleDistribution: RoleDistribution[];
+};
+
+export function StaffPanel({ stats, roleDistribution }: StaffPanelProps) {
+  const maxValue = Math.max(...roleDistribution.map((role) => role.value), 1);
+  const columnsTemplate = `repeat(${Math.max(roleDistribution.length, 1)}, minmax(0, 1fr))`;
 
   return (
     <section className="panel-section">
       <header className="section-head">
         <div>
           <h2>Staff Overview</h2>
+          <p className="section-meta">Current coverage pulled from the staff snapshot.</p>
         </div>
       </header>
 
       <div className="staff-stat-grid">
-        <article className="staff-stat-card">
-          <strong>{totalOnDuty}</strong>
-          <span>On Duty</span>
-        </article>
-        <article className="staff-stat-card">
-          <strong>{available}</strong>
-          <span>Available</span>
-        </article>
-        <article className="staff-stat-card staff-stat-card-accent">
-          <strong>{openRooms}</strong>
-          <span>Open Rooms</span>
-        </article>
+        {stats.map((stat) => (
+          <article
+            className={stat.accent ? "staff-stat-card staff-stat-card-accent" : "staff-stat-card"}
+            key={stat.label}
+          >
+            <strong>{stat.value}</strong>
+            <span>{stat.label}</span>
+          </article>
+        ))}
       </div>
 
       <div className="mini-chart-card">
-        <div className="bar-chart" aria-label="Staff activity chart">
-          {chartValues.map((value, index) => (
+        <p className="role-chart-copy">Role distribution</p>
+        <div
+          aria-label="Staff role distribution chart"
+          className="bar-chart"
+          style={{ gridTemplateColumns: columnsTemplate }}
+        >
+          {roleDistribution.map((role) => (
             <span
               className="bar-chart-column"
-              key={`${value}-${index}`}
-              style={{ height: `${Math.max(20, Math.round(value / 5))}px` }}
+              key={role.label}
+              style={{
+                height: `${Math.max(24, Math.round((role.value / maxValue) * 120))}px`
+              }}
             />
           ))}
         </div>
-        <div className="chart-labels">
-          {columns.map((label) => (
-            <span key={label}>{label}</span>
+        <div className="chart-labels chart-labels-dense" style={{ gridTemplateColumns: columnsTemplate }}>
+          {roleDistribution.map((role) => (
+            <span key={role.label}>{role.label}</span>
           ))}
         </div>
       </div>

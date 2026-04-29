@@ -14,7 +14,17 @@ function getApiBaseUrl() {
   return "http://localhost:8000/api/v1";
 }
 
-export async function fetchJson<T>(path: string, fallback: T): Promise<T> {
+export type ApiSource = "live" | "fallback";
+
+export type ApiResult<T> = {
+  data: T;
+  source: ApiSource;
+  fetchedAt: string;
+};
+
+export async function fetchJson<T>(path: string, fallback: T): Promise<ApiResult<T>> {
+  const fetchedAt = new Date().toISOString();
+
   try {
     const response = await fetch(`${getApiBaseUrl()}${path}`, {
       cache: "no-store"
@@ -24,12 +34,20 @@ export async function fetchJson<T>(path: string, fallback: T): Promise<T> {
       throw new Error(`Request failed: ${response.status}`);
     }
 
-    return (await response.json()) as T;
+    return {
+      data: (await response.json()) as T,
+      source: "live",
+      fetchedAt
+    };
   } catch {
     if (process.env.NODE_ENV !== "production") {
       console.warn(`Using fallback data for ${path}`);
     }
 
-    return fallback;
+    return {
+      data: fallback,
+      source: "fallback",
+      fetchedAt
+    };
   }
 }

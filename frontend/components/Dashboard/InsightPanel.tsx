@@ -1,28 +1,49 @@
-const sparkValues = [20, 14, 28, 18, 21, 26, 33, 25, 30, 38, 43, 29];
+type InsightPanelProps = {
+  engine: string;
+  reasons: string[];
+  queueAreas: Record<string, number>;
+};
 
-export function InsightPanel() {
+export function InsightPanel({ engine, reasons, queueAreas }: InsightPanelProps) {
+  const areaEntries = Object.entries(queueAreas);
+  const maxWaiting = Math.max(...areaEntries.map(([, value]) => value), 1);
+
   return (
     <section className="panel-section">
       <header className="section-head">
         <div>
-          <h2>System Insights</h2>
+          <h2>Decision Rationale</h2>
+          <p className="section-meta">{engine}</p>
         </div>
       </header>
 
-      <article className="insight-card">
-        <div>
-          <strong>Lab Delay:</strong> Causing patient backlog
-        </div>
-        <div className="sparkline-bars" aria-hidden="true">
-          {sparkValues.map((value, index) => (
-            <span
-              className="sparkline-bar"
-              key={`${value}-${index}`}
-              style={{ height: `${value}px` }}
-            />
+      <div className="insight-stack">
+        <div className="reason-list">
+          {reasons.map((reason, index) => (
+            <article className="reason-item" key={reason}>
+              <span className="reason-index">{index + 1}</span>
+              <p>{reason}</p>
+            </article>
           ))}
         </div>
-      </article>
+
+        <div className="queue-mix">
+          {areaEntries.map(([label, value]) => (
+            <div className="queue-mix-row" key={label}>
+              <div className="queue-mix-values">
+                <strong>{label}</strong>
+                <span>{value} waiting</span>
+              </div>
+              <div className="queue-mix-track" aria-hidden="true">
+                <span
+                  className="queue-mix-fill"
+                  style={{ width: `${Math.max(12, Math.round((value / maxWaiting) * 100))}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

@@ -21,6 +21,7 @@ export function QueueCard({ items }: QueueCardProps) {
       <header className="section-head">
         <div>
           <h2>Current Queues</h2>
+          <p className="section-meta">Live waiting counts by tracked department.</p>
         </div>
       </header>
 

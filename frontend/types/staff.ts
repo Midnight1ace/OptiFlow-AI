@@ -3,4 +3,5 @@ export type StaffSnapshot = {
   idle: number;
   busy: number;
   byRole: Record<string, number>;
+  capturedAt?: string;
 };
